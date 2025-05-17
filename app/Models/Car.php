@@ -15,4 +15,6 @@ class Car extends Model
         'price_per_day',
         'status'
     ];
+
+
 }
