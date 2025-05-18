@@ -38,9 +38,9 @@ class CarCategoryController extends Controller
         return $carCategory;
     }
 
-    public function show(CarCategory $category)
+    public function show($category)
     {
-        $carcategory = CarCategory::get($category);
+        $carcategory = CarCategory::findOrFail($category);
         return $carcategory;
     }
 
