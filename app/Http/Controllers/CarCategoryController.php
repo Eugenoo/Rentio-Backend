@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCarCategoryRequest;
+use App\Http\Requests\UpdateCarCategoryRequest;
 use App\Models\Car;
 use App\Models\CarCategory;
 use Illuminate\Http\Request;
@@ -16,12 +17,6 @@ class CarCategoryController extends Controller
         $categories = CarCategory::all();
         return $categories;
     }
-
-//    public function create(Request $request)
-//    {
-//        $category = CarCategory::create($request);
-//        return $category;
-//    }
 
     public function store(StoreCarCategoryRequest $request)
     {
@@ -45,11 +40,19 @@ class CarCategoryController extends Controller
 
     public function show(CarCategory $category)
     {
-
+        $carcategory = CarCategory::get($category);
+        return $carcategory;
     }
 
-    public function update(Request $request, CarCategory $category)
+    public function update(UpdateCarCategoryRequest $request)
     {
+        $carCategory = CarCategory::findOrFail($request->id);
+        $carCategory->edit($request->validated());
+    }
 
+    public function delete(Request $request)
+    {
+        CarCategory::remove();
+        return $request;
     }
 }

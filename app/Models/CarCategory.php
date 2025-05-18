@@ -13,16 +13,8 @@ class CarCategory extends Model
         'photo'
     ];
 
-
     /** Crud */
 
-    public function createPost($data)
-    {
-//        $carCategory = new self($data);
-//        $carCategory->save();
-//        return $carCategory;
-
-    }
     public static function make($data)
     {
         $carCategory = new self($data);
@@ -34,6 +26,12 @@ class CarCategory extends Model
     {
         $this->update($data);
         return $data;
+    }
+
+    public function updateCategory($id, $data)
+    {
+        $carCategory = self::findOrFail($id);
+
     }
 
     public function remove()
