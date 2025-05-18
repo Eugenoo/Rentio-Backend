@@ -8,13 +8,28 @@ class Car extends Model
 {
     protected $fillable = [
         'id',
-        'name',
         'brand',
         'model',
-        'category_id',
+        'registration_number',
+        'year',
+        'available',
+        'car_category_id',
         'price_per_day',
-        'status'
+        'status',
+        'photo',
     ];
+
+    public function show()
+    {
+        return "test";
+    }
+
+    public static function make($request)
+    {
+        $car = new self($request);
+        $car->save();
+        return $car;
+    }
 
 
 }
