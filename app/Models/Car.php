@@ -30,6 +30,4 @@ class Car extends Model
         $car->save();
         return $car;
     }
-
-
 }

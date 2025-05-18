@@ -17,9 +17,10 @@ class CarController extends Controller
         return $cars;
     }
 
-    public function show()
+    public function show($request)
     {
-
+        $car = Car::findOrFail($request);
+        return $car;
     }
 
     public function store(StoreCarRequest $request)
@@ -31,11 +32,8 @@ class CarController extends Controller
         $fileName = $carName."_photo".".png";
         Storage::disk('local')->put($fileName, $data);
         $data = $request->validated();
-
         $data['photo'] = storage_path('app/private/').$fileName;
-
         $car = Car::make($data);
-
         return $car;
     }
 
@@ -44,8 +42,9 @@ class CarController extends Controller
 
     }
 
-    public function delete()
+    public function delete(Request $request)
     {
-
+        $car = Car::find($request->id);
+        $car->delete();
     }
 }
