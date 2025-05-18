@@ -11,7 +11,7 @@ class UpdateCarRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class UpdateCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "brand" => "nullable",
+            "model" => "nullable",
+            "registration_number" => "nullable",
+            "year" => "nullable",
+            "price_per_day" => "nullable",
+            "available" => "nullable",
+            "car_category_id" => "nullable",
+            "status" => "nullable",
+            "photo" => "nullable",
         ];
     }
 }

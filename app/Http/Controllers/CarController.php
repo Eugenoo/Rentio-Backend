@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CarRequest\StoreCarRequest;
+use App\Http\Requests\CarRequest\UpdateCarRequest;
 use App\Models\CarCategory;
 use Illuminate\Http\Request;
 use App\Models\Car;
@@ -37,9 +38,12 @@ class CarController extends Controller
         return $car;
     }
 
-    public function update()
+    public function update(UpdateCarRequest $request)
     {
-
+        $car = Car::findOrFail($request->id);
+        $car->edit($request->validated());
+        return response('Data updated', 200)
+            ->header('Content-Type', 'text/plain');
     }
 
     public function delete(Request $request)

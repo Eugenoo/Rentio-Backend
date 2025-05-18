@@ -24,6 +24,12 @@ class Car extends Model
         return "test";
     }
 
+    public function edit($data)
+    {
+        $this->update($data);
+        return $data;
+    }
+
     public static function make($request)
     {
         $car = new self($request);
