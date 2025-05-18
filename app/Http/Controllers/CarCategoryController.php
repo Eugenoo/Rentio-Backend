@@ -48,6 +48,8 @@ class CarCategoryController extends Controller
     {
         $carCategory = CarCategory::findOrFail($request->id);
         $carCategory->edit($request->validated());
+        return response('Data updated', 200)
+            ->header('Content-Type', 'text/plain');
     }
 
     public function delete(Request $request)
