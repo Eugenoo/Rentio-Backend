@@ -28,12 +28,6 @@ class CarCategory extends Model
         return $data;
     }
 
-    public function updateCategory($id, $data)
-    {
-        $carCategory = self::findOrFail($id);
-
-    }
-
     public function remove()
     {
         $this->delete();
