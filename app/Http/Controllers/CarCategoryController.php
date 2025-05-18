@@ -54,7 +54,7 @@ class CarCategoryController extends Controller
 
     public function delete(Request $request)
     {
-        CarCategory::remove();
-        return $request;
+        $carCategory = CarCategory::find($request->id);
+        $carCategory->delete();
     }
 }

@@ -24,6 +24,7 @@ Route::delete('/car', [CarController::class, 'delete']);
 
 //CarController
 Route::get('carcategory', [CarCategoryController::class, 'index']);
+Route::get('carcategory', [CarCategoryController::class, 'index']);
 Route::post('carcategory', [CarCategoryController::class, 'store']);
 Route::put('carcategory', [CarCategoryController::class, 'update']);
 Route::delete('carcategory', [CarCategoryController::class, 'delete']);

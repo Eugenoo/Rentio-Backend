@@ -27,10 +27,4 @@ class CarCategory extends Model
         $this->update($data);
         return $data;
     }
-
-    public function remove()
-    {
-        $this->delete();
-        return $this;
-    }
 }
