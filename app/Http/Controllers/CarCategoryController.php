@@ -18,22 +18,25 @@ class CarCategoryController extends Controller
         return $categories;
     }
 
-    public function store(StoreCarCategoryRequest $request)
+    public function store(Request $request)
     {
-        $base64_string = $request->photo;
+        $newRequest = $request->validate([
+            "name" => "required",
+            "description" => "nullable",
+            "photo" => "nullable",]);
 
-        $data = base64_decode($base64_string);
-        $fileName = $request->name."_photo".".png";
+        //if photo null jump
+        if($newRequest['photo'] !== null){
+            $base64_string = $newRequest['photo'];
 
-        Storage::disk('local')->put($fileName, $data);
-
+            $data = base64_decode($base64_string);
+            $fileName = $newRequest['name']."_photo".".png";
+            Storage::disk('local')->put($fileName, $data);
+            $newRequest['photo'] = storage_path('app/private/').$fileName;
+        }
         //Save to database
 
-        $data = $request->validated();
-
-        $data['photo'] = storage_path('app/private/').$fileName;
-
-        $carCategory = CarCategory::make($data);
+        $carCategory = CarCategory::make($newRequest);
 
         return $carCategory;
     }
