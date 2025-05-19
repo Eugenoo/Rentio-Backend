@@ -6,6 +6,7 @@ use App\Http\Controllers\CarController;
 use App\Http\Controllers\CarCategoryController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\AuthController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -28,7 +29,7 @@ Route::delete('/car', [CarController::class, 'delete']);
 //CarController
 Route::get('carcategory', [CarCategoryController::class, 'index']);
 Route::get('carcategory/{id}', [CarCategoryController::class, 'show']);
-Route::post('carcategory', [CarCategoryController::class, 'store']);
+Route::post('carcategory', [CarCategoryController::class, 'store'])->middleware('auth:sanctum');
 Route::put('carcategory', [CarCategoryController::class, 'update']);
 Route::delete('carcategory', [CarCategoryController::class, 'delete']);
 
@@ -39,3 +40,8 @@ Route::get('reservation/{id}',[ReservationController::class, 'show']);
 
 //User
 Route::get('/user', [UserController::class, 'index']);
+
+//Auth
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout']);
