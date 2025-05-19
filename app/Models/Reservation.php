@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use http\Env\Request;
 use Illuminate\Database\Eloquent\Model;
 
 class Reservation extends Model
@@ -15,4 +16,17 @@ class Reservation extends Model
         'total_price',
         'status', //( pending, confirmed, canceled)
     ];
+
+    public static function make($request)
+    {
+        $reservation = new self($request);
+        $reservation->save();
+        return $reservation;
+    }
+
+    public  function edit($data)
+    {
+        $this->update($data);
+        return $data;
+    }
 }

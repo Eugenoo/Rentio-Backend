@@ -35,8 +35,12 @@ Route::delete('carcategory', [CarCategoryController::class, 'delete']);
 
 //Route::resource('cars', CarController::class);
 //Reservation
-Route::get('reservation',[ReservationController::class, 'index']);
-Route::get('reservation/{id}',[ReservationController::class, 'show']);
+Route::get('reservation',[ReservationController::class, 'index'])->middleware('auth:sanctum');
+Route::get('reservation/{id}',[ReservationController::class, 'show'])->middleware('auth:sanctum');
+Route::post('reservation',[ReservationController::class, 'create'])->middleware('auth:sanctum');
+Route::put('reservation',[ReservationController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('reservation',[ReservationController::class, 'delete'])->middleware('auth:sanctum');
+
 
 //User
 Route::get('/user', [UserController::class, 'index']);
@@ -45,3 +49,5 @@ Route::get('/user', [UserController::class, 'index']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);
+
+
