@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CarCategoryController;
 use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\UserController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -35,3 +36,6 @@ Route::delete('carcategory', [CarCategoryController::class, 'delete']);
 //Reservation
 Route::get('reservation',[ReservationController::class, 'index']);
 Route::get('reservation/{id}',[ReservationController::class, 'show']);
+
+//User
+Route::get('/user', [UserController::class, 'index']);
