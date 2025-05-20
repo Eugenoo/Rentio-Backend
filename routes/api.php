@@ -7,6 +7,7 @@ use App\Http\Controllers\CarCategoryController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReviewController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -48,6 +49,13 @@ Route::get('/user/{id}', [UserController::class, 'show'])->middleware('auth:sanc
 Route::post('/user', [UserController::class, 'create'])->middleware('auth:sanctum');
 Route::put('/user', [UserController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('/user', [UserController::class, 'delete'])->middleware('auth:sanctum');
+
+//Review
+Route::get('/review', [ReviewController::class, 'index']);
+Route::get('review/{id}', [ReviewController::class, 'show']);
+Route::post('review', [ReviewController::class, 'create']);
+Route::put('review', [ReviewController::class, 'create']);
+Route::delete('review', [ReviewController::class, 'delete']);
 
 //Auth
 Route::post('/register', [AuthController::class, 'register']);
