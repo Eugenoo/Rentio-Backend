@@ -56,4 +56,12 @@ class ReservationController extends Controller
         Return response("Updated", "200")
             ->header('Content-Type', 'text/plain');
     }
+
+    public function delete(Request $request)
+    {
+        $reservation = Reservation::findOrFail($request->id);
+        $reservation->delete();
+        return response("deleted", "200")
+            ->header('Content-Type', 'text/plain');
+    }
 }
