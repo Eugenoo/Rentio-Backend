@@ -47,4 +47,18 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public static function make($request)
+    {
+        $user = new self($request);
+        $user->save();
+        return $user;
+    }
+
+    public function edit($data)
+    {
+        $this->update($data);
+        return $this;
+    }
+
 }

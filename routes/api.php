@@ -43,7 +43,11 @@ Route::delete('reservation',[ReservationController::class, 'delete'])->middlewar
 
 
 //User
-Route::get('/user', [UserController::class, 'index']);
+Route::get('/user', [UserController::class, 'index'])->middleware('auth:sanctum');
+Route::get('/user/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
+Route::post('/user', [UserController::class, 'create'])->middleware('auth:sanctum');
+Route::put('/user', [UserController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/user', [UserController::class, 'delete'])->middleware('auth:sanctum');
 
 //Auth
 Route::post('/register', [AuthController::class, 'register']);
