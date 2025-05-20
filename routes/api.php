@@ -54,7 +54,7 @@ Route::delete('/user', [UserController::class, 'delete'])->middleware('auth:sanc
 Route::get('/review', [ReviewController::class, 'index']);
 Route::get('review/{id}', [ReviewController::class, 'show']);
 Route::post('review', [ReviewController::class, 'create']);
-Route::put('review', [ReviewController::class, 'create']);
+Route::put('review', [ReviewController::class, 'update']);
 Route::delete('review', [ReviewController::class, 'delete']);
 
 //Auth

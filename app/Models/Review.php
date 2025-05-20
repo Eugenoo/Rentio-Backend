@@ -13,4 +13,17 @@ class Review extends Model
         'rating', //(1-5)
         'comment',
     ];
+
+    public static function make($data)
+    {
+        $review = new self($data);
+        $review->save();
+        return $review;
+    }
+
+    public function edit($data)
+    {
+        $this->update($data);
+        return $this;
+    }
 }
