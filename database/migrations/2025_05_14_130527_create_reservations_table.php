@@ -20,6 +20,7 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2);
             $table->enum('status', ['pending','confirmed','cancelled'])->default('pending');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
