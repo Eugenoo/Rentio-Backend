@@ -19,8 +19,10 @@ return new class extends Migration
             $table->year('year');
             $table->decimal('price_per_day', 8,2);
             $table->boolean('available')->default(true);
+            $table->text('photo')->nullable();
             $table->foreignId('car_category_id')->constrained()->onDelete('cascade');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

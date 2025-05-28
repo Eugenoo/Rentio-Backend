@@ -13,11 +13,6 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
-Route::get('/test', function (Request $request) {
-    return response()->json(['message' => 'API is working']);
-});
-
 //Car
 
 Route::get('/car', [CarController::class, 'index']);
@@ -60,6 +55,7 @@ Route::delete('review', [ReviewController::class, 'delete']);
 //Auth
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout']);
 
 
