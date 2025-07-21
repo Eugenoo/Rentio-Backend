@@ -31,9 +31,9 @@ class CarController extends Controller
         //convert car model to kebabcase to work in filesystem
         $carName = str_replace(" ", "_", $request->model);
         $fileName = $carName."_photo".".png";
-        Storage::disk('local')->put($fileName, $data);
+        Storage::disk('public')->put($fileName, $data);
         $data = $request->validated();
-        $data['photo'] = storage_path('app/private/').$fileName;
+        $data['photo'] = 'http://localhost:8000/storage/'.$fileName;
         $car = Car::make($data);
         return $car;
     }
