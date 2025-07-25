@@ -20,6 +20,7 @@ Route::get('car/{id}', [CarController::class, 'show']);
 Route::post('/car', [CarController::class, 'store']);
 Route::put('/car', [CarController::class, 'update']);
 Route::delete('/car', [CarController::class, 'delete']);
+//Route::get('/car/{slug}', [CarController::class, 'showSlug']);
 
 
 //CarController

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('brand');
             $table->string('model');
+            $table->string('slug')->unique();
             $table->string('registration_number')->unique();
             $table->year('year');
             $table->decimal('price_per_day', 8,2);

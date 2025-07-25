@@ -21,6 +21,7 @@ class Car extends Model
         'price_per_day',
         'status',
         'photo',
+        'slug'
     ];
 
     public function show()
@@ -39,5 +40,11 @@ class Car extends Model
         $car = new self($request);
         $car->save();
         return $car;
+    }
+
+    public static function getBySlug($slug)
+    {
+        return Car::where('slug', $slug)->first();
+
     }
 }
