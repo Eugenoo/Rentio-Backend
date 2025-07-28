@@ -54,7 +54,7 @@ class CarController extends Controller
         $fileName = $carName."_photo".".png";
         Storage::disk('public')->put($fileName, $data);
         $data = $request->validated();
-        $data['photo'] = storage_path('app/private/').$fileName;
+        $data['photo'] = "http://localhost:8000/storage/".$fileName;
 
         $data['slug'] = $fullCarName;
         $car = Car::make($data);
