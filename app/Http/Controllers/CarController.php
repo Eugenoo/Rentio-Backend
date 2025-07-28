@@ -8,6 +8,7 @@ use App\Models\CarCategory;
 use Illuminate\Http\Request;
 use App\Models\Car;
 use Illuminate\Support\Facades\Storage;
+use function PHPUnit\Framework\isNumeric;
 
 class CarController extends Controller
 {
@@ -20,6 +21,25 @@ class CarController extends Controller
 
     public function show($request)
     {
+        //if numeric
+        if(is_numeric($request))
+        {
+            $car = Car::findOrFail($request);
+        }
+        else {
+            //find by slug
+            $car = Car::getBySlug($request);
+        }
+
+        return $car;
+        //if string
+        //return model that fit string
+    }
+
+    public function showSlug($slug)
+    {
+        dd('test');
+        dd($slug);
         $car = Car::findOrFail($request);
         return $car;
     }
@@ -29,11 +49,14 @@ class CarController extends Controller
         $base64_string = $request->photo;
         $data = base64_decode($base64_string);
         //convert car model to kebabcase to work in filesystem
-        $carName = str_replace(" ", "_", $request->model);
+        $fullCarName = $request->brand." ".$request->model;
+        $carName = str_replace(" ", "_", $fullCarName);
         $fileName = $carName."_photo".".png";
-        Storage::disk('local')->put($fileName, $data);
+        Storage::disk('public')->put($fileName, $data);
         $data = $request->validated();
-        $data['photo'] = storage_path('app/private/').$fileName;
+        $data['photo'] = "http://localhost:8000/storage/".$fileName;
+
+        $data['slug'] = $fullCarName;
         $car = Car::make($data);
         return $car;
     }
