@@ -16,7 +16,7 @@ Route::get('/user', function (Request $request) {
 //Car
 
 Route::get('/car', [CarController::class, 'index']);
-Route::get('car/{id}', [CarController::class, 'show']);
+Route::get('/car/{id}', [CarController::class, 'show']);
 Route::post('/car', [CarController::class, 'store']);
 Route::put('/car', [CarController::class, 'update']);
 Route::delete('/car', [CarController::class, 'delete']);
