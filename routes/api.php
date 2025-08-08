@@ -8,6 +8,7 @@ use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\TimeController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -58,5 +59,10 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/login', [AuthController::class, 'index'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout']);
+
+//Time
+Route::get('/time', [TimeController::class, 'returnTime']);
+Route::get('/callendar', [TimeController::class, 'callendarInfo']);
+Route::get('/calendar', [TimeController::class, 'monthInfo']);
 
 
