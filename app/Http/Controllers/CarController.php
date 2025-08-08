@@ -74,4 +74,9 @@ class CarController extends Controller
         $car = Car::find($request->id);
         $car->delete();
     }
+
+    public function getReservations(Request $request)
+    {
+
+    }
 }
