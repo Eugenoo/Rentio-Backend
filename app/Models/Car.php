@@ -45,6 +45,10 @@ class Car extends Model
     public static function getBySlug($slug)
     {
         return Car::where('slug', $slug)->first();
+    }
 
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }

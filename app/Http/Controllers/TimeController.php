@@ -23,6 +23,8 @@ class TimeController extends Controller
 
        $monthAndDay = $date->format('M Y');
        $currentDay = $date->format('d');
+       $currentMonth = $date->format('m');
+       $currentYear = $date->format('Y');
        $daysOfMonth = $date->daysInMonth();
        $firstDayOfMonth = $date->startOfMonth()->format('D');
        $daysInPreviousMonth = $date->subMonth()->daysInMonth;
@@ -30,6 +32,8 @@ class TimeController extends Controller
        return response()->json([
            'monthAndDay' => $monthAndDay,
            'currentDay' => $currentDay,
+           'currentMonth' => $currentMonth,
+           'currentYear' => $currentYear,
            'daysOfTheMonth' => $daysOfMonth,
            'firstDayOfMonth' => $firstDayOfMonth,
            'daysInPrevMonth' => $daysInPreviousMonth

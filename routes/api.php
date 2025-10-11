@@ -22,6 +22,7 @@ Route::post('/car', [CarController::class, 'store']);
 Route::put('/car', [CarController::class, 'update']);
 Route::delete('/car', [CarController::class, 'delete']);
 //Route::get('/car/{slug}', [CarController::class, 'showSlug']);
+Route::get('/car/{id}/reservations', [ReservationController::class, 'showCarReservations']);
 
 
 //CarController
@@ -38,6 +39,7 @@ Route::get('reservation/{id}',[ReservationController::class, 'show'])->middlewar
 Route::post('reservation',[ReservationController::class, 'create'])->middleware('auth:sanctum');
 Route::put('reservation',[ReservationController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('reservation',[ReservationController::class, 'delete'])->middleware('auth:sanctum');
+
 
 
 //User

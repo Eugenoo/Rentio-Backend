@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Car;
 use App\Models\Reservation;
 use Illuminate\Http\Request;
 
@@ -9,8 +10,7 @@ class ReservationController extends Controller
 {
     public function index()
     {
-        Reservation::all();
-
+        return Reservation::all();
     }
 
     public function show($id)
@@ -63,5 +63,12 @@ class ReservationController extends Controller
         $reservation->delete();
         return response("deleted", "200")
             ->header('Content-Type', 'text/plain');
+    }
+
+    public function showCarReservations($carId)
+    {
+        $car = Car::findOrFail($carId);
+        $reservations = $car->reservations;
+        return $reservations;
     }
 }
