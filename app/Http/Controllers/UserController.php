@@ -23,12 +23,14 @@ class UserController extends Controller
         $data = $request->validate([
             "name"=>"required",
             "email"=>"required",
-            "password"=>"required",      //rethinkable
+            "password"=>"required", //rethinkable
         ]);
         //there must be option to instantly create password after login or autogenerate?
+        $data['role'] = 'user';
+
         $user = User::make($data);
 
-        return response("User Created", "200")
+        return response($user, "200")
             ->header('Content-Type', 'text/plain');
     }
 
