@@ -44,13 +44,30 @@ class TimeController extends Controller
     {
         $monthOption = $request->query('option');
         $year = $request->query('year');
-        $month = Carbon::createFromFormat('M' , $request->query('month'))->month;
-        $date = Carbon::createFromDate($year, $month)->setTimezone('Europe/Warsaw'); //days in previous month
+        //$month = Carbon::createFromFormat('M' , $request->query('month'))->month;
+        $map = [
+            'Jan' => 1,
+            'Feb' => 2,
+            'Mar' => 3,
+            'Apr' => 4,
+            'May' => 5,
+            'Jun' => 6,
+            'Jul' => 7,
+            'Aug' => 8,
+            'Sep' => 9,
+            'Oct' => 10,
+            'Nov' => 11,
+            'Dec' => 12,
+        ];
+
+        $month = $map[$request->query('month')] ?? null;
+        $date = Carbon::createFromDate($year, $month)->setTimezone('Europe/Warsaw')->firstOfMonth(); //days in previous month
         if($monthOption === 'next'){
             $date->addMonth();
         }elseif ($monthOption === 'prev'){
             $date->subMonth();
         } else return 'ERROR option value must be prev or next';
+
         $monthAndDay = $date->format('M Y');
         $daysOfMonth = $date->daysInMonth();
         $firstDayOfMonth = $date->startOfMonth()->format('D');

@@ -51,4 +51,9 @@ class Car extends Model
     {
         return $this->hasMany(Reservation::class);
     }
+
+    public function category()
+    {
+        return $this->belongsTo(CarCategory::class, 'car_category_id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\FileHelper;
 use App\Http\Requests\CarRequest\StoreCarRequest;
 use App\Http\Requests\CarRequest\UpdateCarRequest;
 use App\Models\CarCategory;
@@ -15,58 +16,59 @@ class CarController extends Controller
     //
     public function index()
     {
-        $cars = Car::all();
-        return $cars;
+        $cars = Car::with('category')->get();
+        return response()->json($cars);
     }
 
-    public function show($request)
+    public function show($param)
     {
         //if numeric
-        if(is_numeric($request))
+        if(is_numeric($param))
         {
-            $car = Car::findOrFail($request);
+            $car = Car::findOrFail($param);
         }
         else {
             //find by slug
-            $car = Car::getBySlug($request);
+            $car = Car::getBySlug($param);
         }
 
-        return $car;
+        return response()->json($car);
         //if string
         //return model that fit string
     }
 
-    public function showSlug($slug)
-    {
-        dd('test');
-        dd($slug);
-        $car = Car::findOrFail($request);
-        return $car;
-    }
-
     public function store(StoreCarRequest $request)
     {
-        $base64_string = $request->photo;
-        $data = base64_decode($base64_string);
-        //convert car model to kebabcase to work in filesystem
-        $fullCarName = $request->brand." ".$request->model;
-        $carName = str_replace(" ", "_", $fullCarName);
-        $fileName = $carName."_photo".".png";
-        Storage::disk('public')->put($fileName, $data);
         $data = $request->validated();
-        $data['photo'] = "http://localhost:8000/storage/".$fileName;
 
-        $data['slug'] = $fullCarName;
+        // Obsługa pliku zdjęcia
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            //convert car model to kebabcase to work with filesystem
+            $fullCarName = $request->brand." ".$request->model;
+            $carName = str_replace(" ", "_", $fullCarName);
+            $fileName = $carName."_photo".".png";
+            Storage::disk('public')->putFileAs('/', $file, $fileName);
+            // zapis ścieżki do bazy
+            $data['photo'] = "http://localhost:8000/storage/".$fileName;
+        }
+        $data['slug'] = $carName;
+
+        //Record in DB
         $car = Car::make($data);
-        return $car;
+        return response()->json(['car' => $car]);
     }
 
     public function update(UpdateCarRequest $request)
     {
         $car = Car::findOrFail($request->id);
         $car->edit($request->validated());
-        return response('Data updated', 200)
-            ->header('Content-Type', 'text/plain');
+
+        return response()
+            ->json([
+                'message' => 'Car edited successfully',
+                'car' => $car,
+            ], 200);
     }
 
     public function delete(Request $request)
@@ -79,4 +81,39 @@ class CarController extends Controller
     {
 
     }
+
+    public function updatePhoto(Request $request, $id)
+    {
+        $data = $request->validate([
+            "photo" => "nullable|image|mimes:jpeg,jpg,png,webp|max:2048"
+        ]);
+
+        $car = Car::findOrFail($id);
+
+        // Obsługa pliku zdjęcia
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            //convert car model to kebabcase to work with filesystem
+            $fullCarName = $car->brand." ".$car->model;
+            $baseName = str_replace(" ", "_", $fullCarName).'_photo';
+
+            $ext = $file->getClientOriginalExtension();
+
+            $fileName = FileHelper::getUniqueFilename($baseName.'.'.$ext);
+
+            //delete old photo?
+
+            Storage::disk('public')->putFileAs('', $file, $fileName);
+            // zapis ścieżki do bazy
+            $data['photo'] = "http://localhost:8000/storage/".$fileName;
+        }
+
+        $car->update($data);
+
+        return response()->json([
+            'car' => $car,
+            'photo_url' => $car->photo ? asset('storage/'.$car->photo) : null
+        ]);
+    }
 }
+

@@ -9,6 +9,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TimeController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -18,29 +20,30 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/car', [CarController::class, 'index']);
 Route::get('/car/{id}', [CarController::class, 'show']);
-Route::post('/car', [CarController::class, 'store']);
-Route::put('/car', [CarController::class, 'update']);
-Route::delete('/car', [CarController::class, 'delete']);
+Route::post('/car', [CarController::class, 'store'])->middleware('auth:sanctum');
+Route::put('/car', [CarController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('/car', [CarController::class, 'delete'])->middleware('auth:sanctum');
 //Route::get('/car/{slug}', [CarController::class, 'showSlug']);
 Route::get('/car/{id}/reservations', [ReservationController::class, 'showCarReservations']);
+Route::post('/car/{id}/editphoto', [CarController::class, 'updatePhoto'])->middleware('auth:sanctum');
 
-
-//CarController
+//Categories
 Route::get('carcategory', [CarCategoryController::class, 'index']);
 Route::get('carcategory/{id}', [CarCategoryController::class, 'show']);
 Route::post('carcategory', [CarCategoryController::class, 'store'])->middleware('auth:sanctum');
-Route::put('carcategory', [CarCategoryController::class, 'update']);
-Route::delete('carcategory', [CarCategoryController::class, 'delete']);
+Route::put('carcategory', [CarCategoryController::class, 'update'])->middleware('auth:sanctum');
+Route::delete('carcategory', [CarCategoryController::class, 'delete'])->middleware('auth:sanctum');
+Route::post('/categories/{id}/editphoto', [CarCategoryController::class, 'updatePhoto'])->middleware('auth:sanctum');
 
 //Route::resource('cars', CarController::class);
 //Reservation
 Route::get('reservation',[ReservationController::class, 'index'])->middleware('auth:sanctum');
 Route::get('reservation/{id}',[ReservationController::class, 'show'])->middleware('auth:sanctum');
 Route::post('reservation',[ReservationController::class, 'create'])->middleware('auth:sanctum');
+Route::post('guestreservation',[ReservationController::class, 'createAsGuest']);
 Route::put('reservation',[ReservationController::class, 'update'])->middleware('auth:sanctum');
 Route::delete('reservation',[ReservationController::class, 'delete'])->middleware('auth:sanctum');
-
-
+Route::get('/reservations/my', [ReservationController::class, 'my'])->middleware('auth:sanctum');
 
 //User
 Route::get('/user', [UserController::class, 'index'])->middleware('auth:sanctum');
@@ -60,13 +63,32 @@ Route::delete('review', [ReviewController::class, 'delete']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/login', [AuthController::class, 'index'])->name('login');
-Route::post('/logout', [AuthController::class, 'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');;
 Route::post('/refresh', [AuthController::class, 'refresh']);
+Route::post('/password-reset', [AuthController::class, 'resetPassword']);
+Route::post('/reset-password', [AuthController::class, 'reset']);
 
+//Payment
+Route::post('/payments', [PaymentController::class, 'store']);
+Route::patch('/payments/{payment}/status', [PaymentController::class, 'updateStatus'])->middleware('auth:sanctum');
+Route::get('/reservations/{reservation}/payments', [PaymentController::class, 'forReservation'])->middleware('auth:sanctum');
+Route::post('/payment/reservation', [PaymentController::class, 'getReservation']);
 
 //Time
 Route::get('/time', [TimeController::class, 'returnTime']);
 Route::get('/callendar', [TimeController::class, 'callendarInfo']);
 Route::get('/calendar', [TimeController::class, 'monthInfo']);
 
+//Notification
+Route::get('/reservations/has-pending', [ReservationController::class, 'hasPending'])->middleware('auth:sanctum','admin');
 
+//Dashboard
+Route::get('/admin/dashboard', [AdminDashboardController::class, 'dashboard'])->middleware('auth:sanctum','admin');
+Route::get('/admin/dashboard/revenuechart', [AdminDashboardController::class, 'revenueChart'])->middleware('auth:sanctum','admin');
+
+//Token
+Route::get('/payment/verify-token', [PaymentController::class, 'verifyToken']);
+
+//Mails
+Route::post('/payments/email', [PaymentController::class, 'sendEmail']);
+Route::post('/send-reservation-mail', [ReservationController::class, 'sendReservationMail']);

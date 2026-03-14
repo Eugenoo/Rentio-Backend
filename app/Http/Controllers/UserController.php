@@ -7,9 +7,14 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return User::all();
+        $limit = min((int) $request->query('limit', 10), 100);
+
+        // Pobranie użytkowników z paginacją
+        $users = User::orderBy('created_at', 'desc')->paginate($limit);
+
+        return $users;
     }
 
     public function show($id)
@@ -39,13 +44,18 @@ class UserController extends Controller
         $data = $request->validate([
             'id'=>'required',
             "name"=>"nullable",
+            "last_name"=>"nullable",
+            "phone"=>"nullable",
             "email"=>"nullable",
         ]);
 
         $user = User::findOrFail($data['id']);
+
         $user->edit($data);
-        return response("User Updated", "200")
-            ->header('Content-Type', 'text/plain');
+
+        return response()->json([
+            'user' => $user
+        ]);
     }
 
     public function delete(Request $request)
@@ -54,7 +64,11 @@ class UserController extends Controller
             'id'=>'required',
         ]);
         $user = User::findOrFail($data['id']);
-        return response("User: ".$user->name." email: ".$user->email." Deleted", "200")
-            ->header("Content-Type", 'text/plain');
+
+        $user->delete();
+
+        return response()->json([
+            'user' => $user
+        ]);
     }
 }
