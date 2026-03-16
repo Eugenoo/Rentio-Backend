@@ -32,7 +32,7 @@ class CarCategoryController extends Controller
             $categoryName = $request->name;
             $categoryStr = str_replace(" ", "_", $categoryName);
             $fileName = $categoryStr."_photo".".png";
-            Storage::disk(env('FILESYSTEM_DISK'))->putFileAs('/categories/', $file, $fileName);
+            Storage::disk(env('FILESYSTEM_DISK'))->putFileAs('categories/', $file, $fileName);
             // zapis ścieżki do bazy
             $data['photo'] = $baseUrl . "/storage/categories/".$fileName;
         }
