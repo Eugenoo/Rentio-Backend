@@ -60,6 +60,13 @@ return [
             'report' => false,
         ],
 
+        'api_storage' => [
+            'driver' => 'local',
+            'root' =>  base_path('../api/storage'),
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
+        ],
+
     ],
 
     /*
