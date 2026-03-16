@@ -22,15 +22,15 @@ class StoreCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "brand" => "required",
-            "model" => "required",
-            "registration_number" => "nullable",
-            "year" => "nullable",
-            "price_per_day" => "nullable",
-            "available" => "nullable",
-            "car_category_id" => "nullable",
-            "status" => "nullable",
-            "photo" => "nullable",
+            "brand" => "required|string|max:255",
+            "model" => "required|string|max:255",
+            "registration_number" => "nullable|string|max:50",
+            "year" => "nullable|integer|min:1900|max:2100",
+            "price_per_day" => "nullable|numeric|min:0",
+            "available" => "nullable|boolean",
+            "car_category_id" => "nullable|integer|exists:car_categories,id",
+            "status" => "nullable|string|max:50",
+            "photo" => "nullable|image|mimes:jpeg,jpg,png,webp|max:2048",
         ];
     }
 }

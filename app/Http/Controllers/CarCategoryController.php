@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCarCategoryRequest;
-use App\Http\Requests\UpdateCarCategoryRequest;
+use App\Helpers\FileHelper;
+use App\Http\Requests\CarCategoryRequest\StoreCarCategoryRequest;
+use App\Http\Requests\CarCategoryRequest\UpdateCarCategoryRequest;
 use App\Models\Car;
 use App\Models\CarCategory;
 use Illuminate\Http\Request;
@@ -18,27 +19,27 @@ class CarCategoryController extends Controller
         return $categories;
     }
 
-    public function store(Request $request)
+
+    public function store(StoreCarCategoryRequest $request)
     {
-        $newRequest = $request->validate([
-            "name" => "required",
-            "description" => "nullable",
-            "photo" => "nullable",]);
+        $data = $request->validated();
+        $baseUrl = getenv('APP_URL');
 
-        //if photo null jump
-        if($newRequest['photo'] !== null){
-            $base64_string = $newRequest['photo'];
-
-            $data = base64_decode($base64_string);
-            $fileName = $newRequest['name']."_photo".".png";
-            Storage::disk('local')->put($fileName, $data);
-            $newRequest['photo'] = storage_path('app/private/').$fileName;
+        // Obsługa pliku zdjęcia
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            //convert car model to kebabcase to work with filesystem
+            $categoryName = $request->name;
+            $categoryStr = str_replace(" ", "_", $categoryName);
+            $fileName = $categoryStr."_photo".".png";
+            Storage::disk('public')->putFileAs('/categories/', $file, $fileName);
+            // zapis ścieżki do bazy
+            $data['photo'] = $baseUrl . "/storage/categories/".$fileName;
         }
-        //Save to database
 
-        $carCategory = CarCategory::make($newRequest);
-
-        return $carCategory;
+        //Record in DB
+        $car = CarCategory::make($data);
+        return response()->json(['carCategory' => $car]);
     }
 
     public function show($category)
@@ -60,4 +61,41 @@ class CarCategoryController extends Controller
         $carCategory = CarCategory::find($request->id);
         $carCategory->delete();
     }
+
+    public function updatePhoto(Request $request, $id)
+    {
+        $data = $request->validate([
+            "photo" => "nullable|image|mimes:jpeg,jpg,png,webp|max:2048"
+        ]);
+
+        $category = CarCategory::findOrFail($id);
+
+        // Obsługa pliku zdjęcia
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            //convert car model to kebabcase to work with filesystem
+            $fullCarName = $category->name."_category_photo";
+            $baseName = str_replace(" ", "_", $fullCarName).'_photo';
+
+            $ext = $file->getClientOriginalExtension();
+
+            $fileName = FileHelper::getUniqueFilename($baseName.'.'.$ext);
+
+            //delete old photo?
+
+            $baseUrl = getenv('APP_URL');
+
+            Storage::disk('public')->putFileAs('', $file, $fileName);
+            // zapis ścieżki do bazy
+            $data['photo'] = $baseUrl."/storage/".$fileName;
+        }
+
+        $category->update($data);
+
+        return response()->json([
+            'category' => $category,
+            'photo_url' => $category->photo ? asset('storage/'.$category->photo) : null
+        ]);
+    }
+
 }

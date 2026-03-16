@@ -11,7 +11,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<\App\Models\database\factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
     use SoftDeletes;
 
@@ -23,8 +23,10 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'last_name',
+        'phone',
         'password',
-        'role', // (admin, user)
+        'role', // (god, admin, user)
     ];
 
     /**
@@ -61,6 +63,12 @@ class User extends Authenticatable
     {
         $this->update($data);
         return $this;
+    }
+
+    // relations
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 
 }
