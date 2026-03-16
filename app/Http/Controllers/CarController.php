@@ -40,6 +40,7 @@ class CarController extends Controller
     public function store(StoreCarRequest $request)
     {
         $data = $request->validated();
+        $baseUrl = getenv('APP_URL');
 
         // Obsługa pliku zdjęcia
         if ($request->hasFile('photo')) {
@@ -50,7 +51,7 @@ class CarController extends Controller
             $fileName = $carName."_photo".".png";
             Storage::disk('public')->putFileAs('/', $file, $fileName);
             // zapis ścieżki do bazy
-            $data['photo'] = "http://localhost:8000/storage/".$fileName;
+            $data['photo'] = $baseUrl . "/storage/".$fileName;
         }
         $data['slug'] = $carName;
 
@@ -102,10 +103,11 @@ class CarController extends Controller
             $fileName = FileHelper::getUniqueFilename($baseName.'.'.$ext);
 
             //delete old photo?
+            $baseUrl = getenv('APP_URL');
 
             Storage::disk('public')->putFileAs('', $file, $fileName);
             // zapis ścieżki do bazy
-            $data['photo'] = "http://localhost:8000/storage/".$fileName;
+            $data['photo'] = $baseUrl."/storage/".$fileName;
         }
 
         $car->update($data);
