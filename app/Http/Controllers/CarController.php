@@ -49,7 +49,7 @@ class CarController extends Controller
             $fullCarName = $request->brand." ".$request->model;
             $carName = str_replace(" ", "_", $fullCarName);
             $fileName = $carName."_photo".".png";
-            Storage::disk('public')->putFileAs('/', $file, $fileName);
+            Storage::disk(env('FILESYSTEM_DISK'))->putFileAs('', $file, $fileName);
             // zapis ścieżki do bazy
             $data['photo'] = $baseUrl . "/storage/".$fileName;
         }
@@ -105,7 +105,7 @@ class CarController extends Controller
             //delete old photo?
             $baseUrl = getenv('APP_URL');
 
-            Storage::disk('public')->putFileAs('', $file, $fileName);
+            Storage::disk(env('FILESYSTEM_DISK'))->putFileAs('', $file, $fileName);
             // zapis ścieżki do bazy
             $data['photo'] = $baseUrl."/storage/".$fileName;
         }
