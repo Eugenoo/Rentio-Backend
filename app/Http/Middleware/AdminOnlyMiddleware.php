@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class AdminOnlyMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,10 +15,11 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->user()?->role !== ['admin', 'demo_admin']) {
-            abort(403);
+        if(auth()->user()->role !== 'admin'){
+            return response()->json([
+                'message' => 'Ta funkcja jest wyłączona w trybie demo.'
+            ], 403);
         }
-
         return $next($request);
     }
 }
