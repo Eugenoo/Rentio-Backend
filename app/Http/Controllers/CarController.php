@@ -42,12 +42,14 @@ class CarController extends Controller
         $data = $request->validated();
         $baseUrl = getenv('APP_URL');
 
+        //convert car model to kebabcase to work with filesystem
+        $fullCarName = $request->brand." ".$request->model;
+        $carName = str_replace(" ", "_", $fullCarName);
+
         // Obsługa pliku zdjęcia
         if ($request->hasFile('photo')) {
             $file = $request->file('photo');
             //convert car model to kebabcase to work with filesystem
-            $fullCarName = $request->brand." ".$request->model;
-            $carName = str_replace(" ", "_", $fullCarName);
             $fileName = $carName."_photo".".png";
             Storage::disk(env('FILESYSTEM_DISK'))->putFileAs('', $file, $fileName);
             // zapis ścieżki do bazy
