@@ -22,7 +22,7 @@ Route::get('/car', [CarController::class, 'index']);
 Route::get('/car/{id}', [CarController::class, 'show']);
 Route::post('/car', [CarController::class, 'store'])->middleware('auth:sanctum');
 Route::put('/car', [CarController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/car', [CarController::class, 'delete'])->middleware('auth:sanctum');
+Route::delete('/car', [CarController::class, 'delete'])->middleware(['auth:sanctum', 'admin.only']);
 //Route::get('/car/{slug}', [CarController::class, 'showSlug']);
 Route::get('/car/{id}/reservations', [ReservationController::class, 'showCarReservations']);
 Route::post('/car/{id}/editphoto', [CarController::class, 'updatePhoto'])->middleware('auth:sanctum');
@@ -32,7 +32,7 @@ Route::get('carcategory', [CarCategoryController::class, 'index']);
 Route::get('carcategory/{id}', [CarCategoryController::class, 'show']);
 Route::post('carcategory', [CarCategoryController::class, 'store'])->middleware('auth:sanctum');
 Route::put('carcategory', [CarCategoryController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('carcategory', [CarCategoryController::class, 'delete'])->middleware('auth:sanctum');
+Route::delete('carcategory', [CarCategoryController::class, 'delete'])->middleware(['auth:sanctum','admin.only']);
 Route::post('/categories/{id}/editphoto', [CarCategoryController::class, 'updatePhoto'])->middleware('auth:sanctum');
 
 //Route::resource('cars', CarController::class);
@@ -42,7 +42,7 @@ Route::get('reservation/{id}',[ReservationController::class, 'show'])->middlewar
 Route::post('reservation',[ReservationController::class, 'create'])->middleware('auth:sanctum');
 Route::post('guestreservation',[ReservationController::class, 'createAsGuest']);
 Route::put('reservation',[ReservationController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('reservation',[ReservationController::class, 'delete'])->middleware('auth:sanctum');
+Route::delete('reservation',[ReservationController::class, 'delete'])->middleware(['auth:sanctum','admin.only']);
 Route::get('/reservations/my', [ReservationController::class, 'my'])->middleware('auth:sanctum');
 
 //User
@@ -50,7 +50,7 @@ Route::get('/user', [UserController::class, 'index'])->middleware('auth:sanctum'
 Route::get('/user/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
 Route::post('/user', [UserController::class, 'create'])->middleware('auth:sanctum');
 Route::put('/user', [UserController::class, 'update'])->middleware('auth:sanctum');
-Route::delete('/user', [UserController::class, 'delete'])->middleware('auth:sanctum');
+Route::delete('/user', [UserController::class, 'delete'])->middleware(['auth:sanctum','admin.only']);
 
 //Review
 Route::get('/review', [ReviewController::class, 'index']);
