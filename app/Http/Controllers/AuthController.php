@@ -107,7 +107,6 @@ class AuthController extends Controller
             ->withCookie(cookie()->forget('refresh_token'));
     }
 
-
     public function refresh(Request $request)
     {
         $refreshToken = $request->cookie('refresh_token');

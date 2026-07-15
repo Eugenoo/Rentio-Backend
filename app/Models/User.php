@@ -26,7 +26,7 @@ class User extends Authenticatable
         'last_name',
         'phone',
         'password',
-        'role', // (god, admin, user)
+        'role', // (god, admin, user, demo_admin)
     ];
 
     /**
