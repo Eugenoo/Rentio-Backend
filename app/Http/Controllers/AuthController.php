@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -17,14 +18,22 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $data = $request->validate([
-            'email' => 'required|email|unique:users',
-            'password' => 'required|confirmed',
-            'password_confirmation' => 'required',
+        $validator = Validator::make($request->all(), [
+            'email' => ['required', 'email', 'unique:users,email'],
+            'password' => ['required', 'confirmed'],
         ]);
-        $data['role'] = 'user';
 
-        //token logic
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation errors',
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
+        $data = $validator->validated();
+
+        $data['password'] = Hash::make($data['password']);
+        $data['role'] = 'user';
 
         $user = User::create($data);
 
@@ -39,13 +48,13 @@ class AuthController extends Controller
             ->cookie(
                 'refresh_token',
                 $refreshToken,
-                60 * 24,   // minutes
-                '/',       // path
-                null,      // domain (null = use current domain)
-                true,      // Secure (required for SameSite=None)
-                true,      // HttpOnly
-                false,     // raw
-                'None'     // SameSite=None  <-- this is the important fix
+                60 * 24,
+                '/',
+                null,
+                true,
+                true,
+                false,
+                'None'
             );
     }
 
