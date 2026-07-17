@@ -92,3 +92,6 @@ Route::get('/payment/verify-token', [PaymentController::class, 'verifyToken']);
 //Mails
 Route::post('/payments/email', [PaymentController::class, 'sendEmail']);
 Route::post('/send-reservation-mail', [ReservationController::class, 'sendReservationMail']);
+
+//Complete Profile
+Route::patch('/me/complete-profile', [UserController::class, 'complete'])->middleware('auth:sanctum');;
