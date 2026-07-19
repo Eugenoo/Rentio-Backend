@@ -1,61 +1,203 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Rentio Backend
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Backend aplikacji **Rentio** służącej do zarządzania wypożyczalnią **pojazdów**. Projekt został zbudowany z wykorzystaniem **Laravel** i udostępnia REST API wykorzystywane przez aplikację frontendową.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Technologie
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Laravel
+- PHP 8.x
+- MySQL
+- Laravel Sanctum (autoryzacja)
+- Eloquent ORM
+- REST API
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Wymagania
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Przed uruchomieniem projektu upewnij się, że posiadasz:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP 8.2 lub nowszy
+- Composer
+- MySQL / MariaDB
+- Node.js (opcjonalnie – do kompilacji assetów)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Sprawdzenie wersji:
 
-## Laravel Sponsors
+```bash
+php -v
+composer -V
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## Instalacja
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Sklonuj repozytorium:
 
-## Contributing
+```bash
+git clone <adres_repozytorium>
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Przejdź do katalogu projektu:
 
-## Code of Conduct
+```bash
+cd Rentio-Backend
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Zainstaluj zależności:
 
-## Security Vulnerabilities
+```bash
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Skopiuj plik konfiguracyjny:
 
-## License
+```bash
+cp .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Wygeneruj klucz aplikacji:
+
+```bash
+php artisan key:generate
+```
+
+Skonfiguruj połączenie z bazą danych w pliku `.env`.
+
+Uruchom migracje:
+
+```bash
+php artisan migrate
+```
+
+Jeżeli projekt zawiera seedy:
+
+```bash
+php artisan db:seed
+```
+
+---
+
+## Uruchomienie aplikacji
+
+Uruchom serwer developerski:
+
+```bash
+php artisan serve
+```
+
+Domyślnie aplikacja będzie dostępna pod adresem:
+
+```
+http://127.0.0.1:8000
+```
+
+---
+
+## Dostępne komendy
+
+| Komenda | Opis |
+|----------|------|
+| `php artisan serve` | Uruchamia serwer developerski |
+| `php artisan migrate` | Wykonuje migracje bazy danych |
+| `php artisan migrate:fresh --seed` | Odtwarza bazę danych i uruchamia seedy |
+| `php artisan db:seed` | Wypełnia bazę przykładowymi danymi |
+| `php artisan route:list` | Wyświetla listę endpointów API |
+| `php artisan optimize:clear` | Czyści cache aplikacji |
+
+---
+
+## Struktura projektu
+
+```
+app/
+├── Http/
+│   ├── Controllers/
+│   ├── Middleware/
+│   └── Requests/
+├── Models/
+├── Helpers/
+
+database/
+├── migrations/
+├── seeders/
+└── factories/
+
+routes/
+├── api.php
+└── web.php
+
+config/
+public/
+storage/
+```
+
+---
+
+## Konfiguracja środowiska
+
+Przykładowa konfiguracja pliku `.env`:
+
+```env
+APP_NAME=Rentio
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=rentio
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+---
+
+## Główne funkcjonalności
+
+Backend udostępnia REST API umożliwiające:
+
+- rejestrację i logowanie użytkowników,
+- autoryzację z wykorzystaniem tokenów,
+- zarządzanie pojazdami,
+- zarządzanie kategoriami pojazdów,
+- obsługę rezerwacji,
+- zarządzanie płatnościami,
+- dodawanie opinii o pojazdach,
+- zarządzanie użytkownikami,
+- panel administracyjny,
+- walidację danych wejściowych.
+
+---
+
+## Architektura
+
+Projekt został zrealizowany zgodnie z architekturą MVC (Model–View–Controller).
+
+- **Controllers** – obsługa żądań HTTP i logika aplikacji,
+- **Models** – komunikacja z bazą danych przy użyciu Eloquent ORM,
+- **Requests** – walidacja danych,
+- **Middleware** – autoryzacja i kontrola dostępu,
+- **Routes** – definicja endpointów API.
+
+---
+
+## Integracja z frontendem
+
+Backend komunikuje się z aplikacją frontendową poprzez REST API, zwracając odpowiedzi w formacie JSON.
+
+---
+
+## Autor
+
+Projekt został przygotowany jako backend aplikacji **Rentio** do zarządzania wypożyczalnią pojazdów.
+
+---
+
+## Licencja
+
+Projekt przeznaczony do celów edukacyjnych lub rozwoju własnego. W razie potrzeby można dodać odpowiednią licencję (np. MIT).
