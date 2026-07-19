@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CompleteProfileRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -68,6 +69,21 @@ class UserController extends Controller
         $user->delete();
 
         return response()->json([
+            'user' => $user
+        ]);
+    }
+
+    public function complete(CompleteProfileRequest $request)
+    {
+        $user = auth()->user();
+
+        $user->update([
+            ...$request->validated(),
+            'profile_completed' => true,
+        ]);
+
+        return response()->json([
+            'message' => 'Profile completed.',
             'user' => $user
         ]);
     }

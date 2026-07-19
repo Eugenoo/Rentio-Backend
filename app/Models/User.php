@@ -27,6 +27,7 @@ class User extends Authenticatable
         'phone',
         'password',
         'role', // (god, admin, user, demo_admin)
+        'profile_completed',
     ];
 
     /**

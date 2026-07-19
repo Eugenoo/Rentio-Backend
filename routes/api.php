@@ -49,7 +49,7 @@ Route::get('/reservations/my', [ReservationController::class, 'my'])->middleware
 Route::get('/user', [UserController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/user/{id}', [UserController::class, 'show'])->middleware('auth:sanctum');
 Route::post('/user', [UserController::class, 'create'])->middleware('auth:sanctum');
-Route::put('/user', [UserController::class, 'update'])->middleware('auth:sanctum');
+Route::put('/user', [UserController::class, 'update'])->middleware(['auth:sanctum','admin.only']);
 Route::delete('/user', [UserController::class, 'delete'])->middleware(['auth:sanctum','admin.only']);
 
 //Review
@@ -92,3 +92,6 @@ Route::get('/payment/verify-token', [PaymentController::class, 'verifyToken']);
 //Mails
 Route::post('/payments/email', [PaymentController::class, 'sendEmail']);
 Route::post('/send-reservation-mail', [ReservationController::class, 'sendReservationMail']);
+
+//Complete Profile
+Route::patch('/me/complete-profile', [UserController::class, 'complete'])->middleware('auth:sanctum');;

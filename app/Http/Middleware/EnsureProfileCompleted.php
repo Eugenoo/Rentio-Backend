@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class EnsureProfileCompleted
 {
     /**
      * Handle an incoming request.
@@ -15,8 +15,16 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!in_array(auth()->user()?->role, ['admin', 'demo_admin'])) {
-            abort(403);
+        $user = $request->user();
+
+        if (
+            $user &&
+            !$user->profile_completed &&
+            !$request->is('api/me/complete-profile')
+        ) {
+            return response()->json([
+                'message' => 'Complete your profile first.'
+            ], 403);
         }
 
         return $next($request);
